@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyyad Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Inter & JetBrains Mono -->
+    <link rel="icon" type="image/x-icon" href="GRAPHIC/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                screens: {
+                    'xs': '480px',
+                    'sm': '640px',
+                    'md': '768px',
+                    'lg': '1024px',
+                    'xl': '1280px',
+                    '2xl': '1536px',
+                    '3xl': '1920px',
+                    '4xl': '2560px',
+                },
+                extend: {
+                    colors: {
+                        brandBg: '#09090b',
+                        brandCard: '#121215',
+                        brandBorder: '#222228',
+                        accent: '#e4e4e7',
+                        accentMuted: '#71717a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222228;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #71717a;
+        }
+
+        /* Hide scrollbar for clean horizontal nav scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .text-overlay-shadow {
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Tab Transition */
+        @keyframes tabFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content.active-tab {
+            display: block !important;
+            animation: tabFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Smooth View Transitions for Filter Switches */
+        @keyframes viewSmoothIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .view-section {
+            animation: viewSmoothIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Slideshow Animation */
+        .slide-item {
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .slide-item.active-slide {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Intro Screen Animations */
+        #intro-screen {
+            transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+        }
+        #intro-text {
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-brandBg text-zinc-300 font-sans antialiased min-h-screen selection:bg-zinc-200 selection:text-black flex flex-col justify-between">
+
+    <!-- INTRO ANIMATION (APPLE STYLE GREETING) -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center pointer-events-auto">
+        <h1 id="intro-text" class="font-mono text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-widest uppercase opacity-0 translate-y-2">
+            HELLO
+        </h1>
+    </div>
+
+    <!-- HEADER NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brandBg/90 backdrop-blur-md border-b border-brandBorder/60">
+        <div class="w-full max-w-7xl 2xl:max-w-[1800px] 4xl:max-w-[2400px] mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 h-16 2xl:h-20 4xl:h-24 flex items-center justify-between gap-4">
+            <a href="#work" onclick="switchTab('work')" class="group flex items-center gap-2.5 shrink-0">
+                <span class="w-2.5 h-2.5 2xl:w-3.5 2xl:h-3.5 rounded-full bg-zinc-400 group-hover:bg-white transition-colors"></span>
+                <span class="font-mono text-xs sm:text-sm 2xl:text-base 4xl:text-xl tracking-wider font-bold text-white uppercase group-hover:text-zinc-300 transition-colors">
+                    RIYYAD HARFAD HIDAYAT
+                </span>
+            </a>
+
+            <nav class="flex items-center gap-4 sm:gap-8 2xl:gap-12 font-mono text-xs 2xl:text-sm 4xl:text-base uppercase tracking-widest overflow-x-auto flex-nowrap no-scrollbar py-2 max-w-full">
+                <a href="#work" id="nav-work" onclick="switchTab('work')" class="text-white transition-colors shrink-0 border-b border-white pb-0.5">Work</a>
+                <a href="#profile" id="nav-profile" onclick="switchTab('profile')" class="text-zinc-500 hover:text-white transition-colors shrink-0">Profile</a>
+                <a href="#client" id="nav-client" onclick="switchTab('client')" class="text-zinc-500 hover:text-white transition-colors shrink-0">Client</a>
+                <a href="#contact" id="nav-contact" onclick="switchTab('contact')" class="text-zinc-500 hover:text-white transition-colors shrink-0">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-20 sm:pt-24 2xl:pt-28 4xl:pt-36 pb-16 w-full max-w-7xl 2xl:max-w-[1800px] 4xl:max-w-[2400px] mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 grow min-h-[calc(100vh-80px)]">
+
+        <!-- WORK TAB -->
+        <section id="tab-work" class="tab-content active-tab space-y-8 sm:space-y-10">
+            <!-- Filter Bar -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 2xl:gap-4 font-mono text-xs 2xl:text-sm 4xl:text-base border-b border-brandBorder pb-4">
+                <button onclick="filterProjects('ALL')" class="filter-btn active bg-zinc-200 text-black font-bold px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">ALL</button>
+                <button onclick="filterProjects('MOTION')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">MOTION</button>
+                <button onclick="filterProjects('3D')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">3D</button>
+                <button onclick="filterProjects('GRAPHIC')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">GRAPHIC</button>
+                <button onclick="filterProjects('TD_CODE')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">TD / CODE</button>
+                <button onclick="filterProjects('VIDEO')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">VIDEO</button>
+                <button onclick="filterProjects('PHOTO')" class="filter-btn text-zinc-400 hover:text-white hover:bg-brandCard px-3 py-1.5 2xl:px-5 2xl:py-2.5 rounded uppercase transition-all">PHOTO</button>
+            </div>
+
+            <!-- 1. FULL SLIDESHOW (ALL TAB) -->
+            <div id="slideshow-view" class="view-section relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-xl overflow-hidden border border-brandBorder group bg-brandCard">
+                <div id="slides-wrapper" class="w-full h-full relative">
+                    <!-- Dynamic Slide Injection -->
+                </div>
+                <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white p-3 rounded-full border border-white/20 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-20">&#10094;</button>
+                <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white p-3 rounded-full border border-white/20 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-20">&#10095;</button>
+                <div id="dots-container" class="absolute top-4 right-4 flex gap-1.5 z-20"></div>
+            </div>
+
+            <!-- 2. CATEGORY VIEW (MASONRY COLUMNS MODIFIED) -->
+            <div id="category-view" class="view-section hidden space-y-12">
+                <!-- SECTION 1: CLIENT PROJECTS -->
+                <div id="client-section-block" class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-brandBorder/60 pb-2">
+                        <h2 id="category-client-title" class="font-mono text-xs sm:text-sm text-zinc-400 uppercase tracking-widest">// CLIENT & COMMERCIAL PROJECTS</h2>
+                        <span id="client-count-badge" class="font-mono text-[10px] text-zinc-500 uppercase">0 PROJECTS</span>
+                    </div>
+                    <!-- Menggunakan Layout Columns (Masonry) -->
+                    <div id="client-grid" class="columns-1 sm:columns-2 lg:columns-3 2xl:columns-4 3xl:columns-5 4xl:columns-6 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- SECTION 2: PERSONAL PROJECTS -->
+                <div id="personal-section-block" class="space-y-4 pt-4">
+                    <div class="flex items-center justify-between border-b border-brandBorder/60 pb-2">
+                        <h2 id="category-personal-title" class="font-mono text-xs sm:text-sm text-zinc-400 uppercase tracking-widest">// PERSONAL & EXPERIMENTAL PROJECTS</h2>
+                        <span id="personal-count-badge" class="font-mono text-[10px] text-zinc-500 uppercase">0 PROJECTS</span>
+                    </div>
+                    <!-- Menggunakan Layout Columns (Masonry) -->
+                    <div id="personal-grid" class="columns-1 sm:columns-2 lg:columns-3 2xl:columns-4 3xl:columns-5 4xl:columns-6 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE TAB -->
+        <section id="tab-profile" class="tab-content hidden space-y-12 2xl:space-y-16">
+            <div class="space-y-4 2xl:space-y-6">
+                <h2 class="font-mono text-xs 2xl:text-sm 4xl:text-base text-zinc-400 tracking-widest uppercase">// BIOGRAPHY</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-8 2xl:gap-12 items-start">
+                    <div class="md:col-span-2 xl:col-span-3 space-y-4 text-zinc-300 font-sans leading-relaxed text-sm sm:text-base 2xl:text-lg 4xl:text-xl">
+                        <p class="text-white text-lg sm:text-xl 2xl:text-2xl font-mono">
+                            My Name is <span class="text-zinc-100 font-semibold underline underline-offset-4 decoration-zinc-500">Riyyad Harfad Hidayat</span>. People call me iyyad.
+                        </p>
+                        <p>
+                            I always like to tell stories that I can change through interesting visual media and convey them well. I am a person who likes to experiment, explore and is always happy when I am in a new place because I can learn from another perspective.
+                        </p>
+                    </div>
+                    <div class="relative aspect-[3/4] max-w-sm w-full mx-auto md:mx-0 bg-brandCard border border-brandBorder rounded-lg overflow-hidden">
+                        <img src="Bio\Riyyad Harfad Hidayat.jpg" alt="Riyyad Harfad Hidayat" class="w-full h-full object-cover grayscale contrast-125">
+                        <div class="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-sm p-2 text-center rounded border border-white/10">
+                            <span class="font-mono text-[10px] 2xl:text-xs text-zinc-400 block">Riyyad Harfad Hidayat — (iyyad)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 2xl:gap-16 pt-6 border-t border-brandBorder/60">
+                <div class="space-y-6 2xl:space-y-8">
+                    <!-- SOLO EXHIBITION -->
+                    <div class="space-y-3">
+                        <h2 class="font-mono text-xs 2xl:text-sm 4xl:text-base text-zinc-400 tracking-widest uppercase">// SOLO EXHIBITION</h2>
+                        <div class="space-y-2 font-mono text-xs 2xl:text-sm 4xl:text-base">
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2023</span>
+                                <span class="text-white text-right">Lebih Jauh Exhibition CIPTA, RASA, DAN KARSA <span class="text-zinc-500">IDN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2023</span>
+                                <span class="text-white text-right">Resepsi Visual Exhibition <span class="text-zinc-500">IDN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2025</span>
+                                <span class="text-white text-right">LOGOTYPE & 3D EXHIBITION GREEDY DUST <span class="text-zinc-500">IDN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2026</span>
+                                <span class="text-white text-right">Where the Tree Huggers Stand <span class="text-zinc-500">JPN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2026</span>
+                                <span class="text-white text-right">Rumpun Oita, Feeling Reality through Empathy <span class="text-zinc-500">JPN</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GROUP EXHIBITION -->
+                    <div class="space-y-3">
+                        <h2 class="font-mono text-xs 2xl:text-sm 4xl:text-base text-zinc-400 tracking-widest uppercase">// GROUP EXHIBITION</h2>
+                        <div class="space-y-2 font-mono text-xs 2xl:text-sm 4xl:text-base">
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2026</span>
+                                <span class="text-white text-right">BANDUNG ZINE FEST 26 <span class="text-zinc-500">IDN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2026</span>
+                                <span class="text-white text-right">BDG LIGHTS 2026 <span class="text-zinc-500">IDN</span></span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-brandBorder/40">
+                                <span class="text-zinc-400">2026</span>
+                                <span class="text-white text-right">Asia Mapping Art Contest 2026 <span class="text-zinc-500">WORLDWIDE</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHRONOLOGICAL EXPERIENCE -->
+                <div class="space-y-4 2xl:space-y-6">
+                    <h2 class="font-mono text-xs 2xl:text-sm 4xl:text-base text-zinc-400 tracking-widest uppercase">// CHRONOLOGICAL EXPERIENCE</h2>
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left font-mono text-xs 2xl:text-sm 4xl:text-base">
+                            <thead>
+                                <tr class="border-b border-brandBorder text-zinc-500">
+                                    <th class="pb-2 font-normal">YEAR</th>
+                                    <th class="pb-2 font-normal">ROLE</th>
+                                    <th class="pb-2 font-normal">PROJECT / EVENT</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brandBorder/30">
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2023</td>
+                                    <td class="py-2.5 text-zinc-300">Video Director</td>
+                                    <td class="py-2.5 text-white">CROWDHEAD</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2023</td>
+                                    <td class="py-2.5 text-zinc-300">Photographer & Video Director</td>
+                                    <td class="py-2.5 text-white">Lebih Jauh Exhibition</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2024</td>
+                                    <td class="py-2.5 text-zinc-300">Creative Division Coordinator</td>
+                                    <td class="py-2.5 text-white">Pandang Exhibition</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2024</td>
+                                    <td class="py-2.5 text-zinc-300">Visual Jockey & Motion Graphic</td>
+                                    <td class="py-2.5 text-white">JFW 2025 Jakarta Fashion Week</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2024</td>
+                                    <td class="py-2.5 text-zinc-300">Installation Build Assistant</td>
+                                    <td class="py-2.5 text-white">OURCHETYPE</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2025</td>
+                                    <td class="py-2.5 text-zinc-300">Video Editor & Photographer</td>
+                                    <td class="py-2.5 text-white">Cruising</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2025</td>
+                                    <td class="py-2.5 text-zinc-300">Visual Jockey</td>
+                                    <td class="py-2.5 text-white">Indonesia Mods Mayday 2025</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2025</td>
+                                    <td class="py-2.5 text-zinc-300">Exhibition Director</td>
+                                    <td class="py-2.5 text-white">Endgame Exhibition</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2025</td>
+                                    <td class="py-2.5 text-zinc-300">Motion Graphic</td>
+                                    <td class="py-2.5 text-white">JFW 2026 Jakarta Fashion Week</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-zinc-400">2026</td>
+                                    <td class="py-2.5 text-zinc-300">Motion Graphic & Visual Jockey</td>
+                                    <td class="py-2.5 text-white">BALCONY SHOWCASE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLIENT TAB -->
+        <section id="tab-client" class="tab-content hidden relative min-h-[70vh] flex flex-col justify-center items-center overflow-hidden rounded-xl bg-brandBg">
+            <div class="absolute inset-0 z-0 flex items-center justify-center p-4 pointer-events-none">
+                <div id="client-bg-container" class="w-full max-w-2xl aspect-[3/4] rounded-lg bg-contain bg-center bg-no-repeat opacity-0 transition-opacity duration-300 shadow-2xl"></div>
+            </div>
+            <div class="absolute inset-0 z-0 bg-black/30 pointer-events-none"></div>
+
+            <div class="relative z-10 w-full max-w-5xl mx-auto text-center space-y-8 p-6">
+                <div class="space-y-2">
+                    <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-widest font-mono uppercase">CLIENTS & COLLABORATORS</h1>
+                    <p class="font-mono text-xs sm:text-sm text-zinc-400 uppercase tracking-widest">Indonesia | Brazil </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-3 font-mono text-sm sm:text-lg md:text-xl text-zinc-300 uppercase leading-relaxed max-w-5xl mx-auto pt-4">
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Dongker.jpg">Dongker</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Honey World.jpg">Honey World</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Pendarra.jpg">Pendarra</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Plastisin.jpg">Plastisin</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/The Couch Club.jpg">The Couch Club</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/MIRISY.jpg">MIRISY</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Bernie.jpg">Bernie</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Gummy.jpg">Gummy</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/LILOLILO.jpg">LILOLILO</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Jakarta Fashion Week.jpg">Jakarta Fashion Week</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/MOTIONBEAST.jpg">MOTIONBEAST</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Greedy Dust.jpg">Greedy Dust</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Shreya.jpg">Shreya</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Saint Club.jpg">Saint Club</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Crowdhead.jpg">Crowdhead</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/SN Records.jpg">SN Records</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/NOTBADCLUB.jpg">NOTBADCLUB</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Movejuice.jpg">Movejuice</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Cruising.jpg">Cruising</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Endgame.jpg">Endgame</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Seraya Group.jpg">Seraya Group</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Beer Bintang.jpg">Beer Bintang</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Wardah.jpg">Wardah</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Deesis.jpg">Deesis</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/Muda.jpg">Muda</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/NATALIA KIANTORO.jpg">NATALIA KIANTORO</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/PONDS.jpg">PONDS</span> <span class="text-zinc-600">|</span>
+                    <span class="client-item hover:text-white hover:underline cursor-pointer transition-all duration-200" data-bg="Client/BEAT BOYS.jpg">BEAT BOYS</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT TAB -->
+        <section id="tab-contact" class="tab-content hidden min-h-[50vh] 2xl:min-h-[60vh] flex flex-col justify-center items-center text-center space-y-8 2xl:space-y-12 py-12">
+            <div class="space-y-2"><span class="font-mono text-xs 2xl:text-sm 4xl:text-base text-zinc-400 tracking-widest uppercase block">Here</span></div>
+            <div class="space-y-6 w-full max-w-full px-2">
+                <a href="mailto:riyyadh1@gmail.com" class="text-2xl xs:text-3xl sm:text-5xl md:text-6xl 2xl:text-7xl 4xl:text-8xl font-extrabold font-mono text-white hover:text-zinc-300 transition-colors tracking-tight block glow-text break-all sm:break-normal">riyyadh1@gmail.com</a>
+                <div class="pt-2">
+                    <button onclick="copyToClipboard('riyyadh1@gmail.com')" class="inline-flex items-center gap-2 bg-brandCard border border-brandBorder hover:border-zinc-500 text-xs 2xl:text-sm 4xl:text-base font-mono text-zinc-300 px-5 py-2.5 rounded-full transition-colors active:scale-95">
+                        <svg class="w-4 h-4 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span id="copy-text">EMAIL</span>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-4">
+                <div class="inline-flex items-center gap-2.5 bg-brandCard border border-brandBorder/80 px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs 2xl:text-sm text-zinc-300">
+                    <span class="w-2 h-2 2xl:w-2.5 2xl:h-2.5 rounded-full bg-zinc-300 animate-pulse"></span>
+                    <span>Let's Create something together!</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-brandBorder/40 py-6 2xl:py-8 w-full max-w-7xl 2xl:max-w-[1800px] 4xl:max-w-[2400px] mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 flex flex-col sm:flex-row items-center justify-between text-xs 2xl:text-sm font-mono text-zinc-500 gap-4">
+        <div>&copy; <span id="year">2026</span> RIYYAD HARFAD HIDAYAT. ALL RIGHTS RESERVED.</div>
+        <div class="flex gap-4"><a href="#work" onclick="switchTab('work')" class="hover:text-white transition-colors">BACK TO TOP</a></div>
+    </footer>
+
+    <!-- SCRIPT FUNCTIONALITIES & PROJECT DATA -->
+    <script>
+        // MASTER CONFIG DATA PROJECT
+        const projectsData = {
+            MOTION: {
+                client: [
+                    { title: 'DONGKER - TAKBIR TERDENGAR KEJAM', tag: 'MOTION GRAPHIC', type: 'INDEPENDENT', imgUrl: 'Motion/DONGKER_TAKBIRTERDENGARKEJAM.gif' },
+                    { title: 'BALCONY SHOWCASE', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/BALCONY_SHOWCASE.gif' },
+                    { title: 'LALAFEST 2026 TEASER', tag: 'MOTION GRAPHIC', type: 'INDEPENDENT', imgUrl: 'Motion/LALAFEST26_TEASER.gif' },
+                    { title: 'MUDA SWARNA', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/MUDA_SWARNA.gif' },
+                    { title: 'NBC CROWD', tag: 'MOTION GRAPHIC', type: 'INDEPENDENT', imgUrl: 'Motion/NBCCROWD.gif' },
+                    { title: 'NOTBADCLUB ADS', tag: 'MOTION GRAPHIC', type: 'INDEPENDENT', imgUrl: 'Motion/NOTBADCLUB_Ads.gif' },
+                    { title: 'BERNIE SINGLE PROMO', tag: 'MOTION GRAPHIC', type: 'INDEPENDENT', imgUrl: 'Motion/BERNIE_SINGLEPROMO.gif' },
+                    { title: 'ARA - AMA COMPETITION', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/AMA_AMA.gif' },
+                    { title: 'ARA - PENDAR 2026', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/AMA_PENDAR.gif' },
+                    { title: 'WARDAH - JMFW 2026', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/WARDAH_JMFW26.gif' },
+                    { title: 'SAKABUANA', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/SAKABUANA.gif' },
+                    { title: 'PONDS - JFW 2026', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/PONDS_JFW26.gif' },
+                    { title: 'INDONESIA MODS MAY DAY 2026', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/IMMD 26.gif' },
+                    { title: 'Asia Afrika Festival 2026', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/Asia Afrika Festival 2026.gif' },
+                    { title: 'MARC MODS HI FIDELITY', tag: 'MOTION GRAPHIC', type: 'STUDIO', imgUrl: 'Motion/MARCHMODS.gif' }
+                ],
+                personal: [
+                    { title: 'MAPPING MOTIONBEAST', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Motion/MAPPING SENDIRI.gif' }
+                ]
+            },
+            '3D': {
+                client: [
+                    { title: 'DONGKER - SEDIH MEMANDANG MIMPI', tag: 'INDEPENDENT', type: 'INDEPENDENT', imgUrl: '3D/DONGKER_Sedihmemandangmimpi.gif' },
+                    { title: 'HONEY WORLD - STEPPIN ROLLIN', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/HONEY_SteppinRollin.gif' },
+                    { title: 'DONGKER - LAMUNAN RINGAN DI SINGAPURA', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/DONGKER_Lamunanringandisingapura.gif' },
+                    { title: 'When the Forest Became a Toy', tag: 'EXHIBITION', type: 'INDEPENDENT', imgUrl: '3D/When the Forest Became a Toy.gif' },
+                    { title: 'Perpetual Turn', tag: 'EXHIBITION', type: 'INDEPENDENT', imgUrl: '3D/Perpetual Turn.gif' },
+                    { title: 'GREEDY DUST - SAESTU EXHIBITION', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/GREEDY DUST_EXHIBITION SAESTU.gif' },
+                    { title: 'PLASTISIN SHOWCASE', tag: '3D ANIMATION', type: 'STUDIO', imgUrl: '3D/PLASTISIN_SHOWCASE.gif' },
+                    { title: 'GUMMY - CHASE', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/GUMMY_CHASE.gif' },
+                    { title: 'HONEY WORLD', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/HONEY WORLD.gif' },
+                    { title: 'SENANDUNG DI BATAS MIMPI', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/Senandung di Batas Mimpi.gif' },
+                    { title: 'CASE - RINGGHILLS', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/CASE_Ringghills.jpg' },
+                    { title: 'SOUNDPICK', tag: '3D ANIMATION', type: 'STUDIO', imgUrl: '3D/SOUNDPICK.gif' },
+                    { title: 'OFF MAPPING 2026      ', tag: '3D ANIMATION', type: 'STUDIO', imgUrl: '3D/OFF MAPPING.gif' },
+                    { title: 'JFW NATALIA KIANTORO', tag: '3D ANIMATION', type: 'STUDIO', imgUrl: '3D/NATALIA KIANTORO.gif' },
+                    { title: 'OTHERSIDE STUDIO', tag: '3D ANIMATION', type: 'INDEPENDENT', imgUrl: '3D/OTHERSIDESTUDIO.gif' },
+                    { title: 'BEER BINTANG - ANAMORPHIC DRINK', tag: '3D ANIMATION', type: 'STUDIO', imgUrl: '3D/BEERBINTANG_ANAMORPHIC DRINK.gif' }
+                ],
+                personal: [
+                    { title: 'GEESE', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/GEESE_RESPONDING TO THE SONGS.gif' },
+                    { title: 'ROSALíA', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/ROSALIA.gif' },
+                    { title: 'RRAG', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/RRAG.gif' },
+                    { title: 'PORIS', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/PORIS.gif' },
+                    { title: 'POLITIK? 1', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/POLITIK 1.gif' },
+                    { title: 'POLITIK? 2', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/POLITIK 2.gif' },
+                    { title: 'CLAIRO - LOVE SONG', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/CLAIRO_LOVE SONG.gif' },
+                    { title: 'JANNABI - DREAMS BOOKS POWER AND WALLS', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/JANNABI_DREAMS BOOKS POWER AND WALLS.gif' },
+                    { title: 'FEAST - MEMBANGUN DAN MENGHANCURKAN', tag: '3D ARTWORK', type: 'INDEPENDENT', imgUrl: '3D/FEAST_MNM.gif' }
+                ]
+            },
+            GRAPHIC: {
+                client: [
+                    { title: 'Riyyad*s Zine Rumah?/Rumah', tag: 'PRINT', type: 'INDEPENDENT', imgUrl: 'Design/Riyyad Zine Rumah.gif' },
+                    { title: 'RISA SIANIPAR - ZIARAH', tag: 'STORYBOARD', type: 'STUDIO', imgUrl: 'Design/RISA SIANIPAR_ZIARAH.gif' },
+                    { title: 'RUSHBITE', tag: 'PRINT & BRANDING', type: 'STUDIO', imgUrl: 'Design/RUSHBITE.jpg' }
+                ],
+                personal: []
+            },
+            TD_CODE: {
+                client: [
+                    { title: 'DONGKER - ACAB', tag: 'TOUCHDESIGNER', type: 'INDEPENDENT', imgUrl: 'Td_code/DONGKER_ACAB.gif' },
+                    { title: 'Potrait of Tin*s Family', tag: 'TOUCHDESIGNER', type: 'INDEPENDENT', imgUrl: 'Td_code/Potrait of Tins Family.gif' },
+                    { title: 'DONGKER - POL?', tag: 'TOUCHDESIGNER', type: 'INDEPENDENT', imgUrl: 'Td_code/DONGKER_Polri.gif' },
+                    { title: 'DONGKER - FACE SWAP?', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Td_code/DONGKER_FACE SWAP.gif' },
+                    { title: 'BASICK LOGO REACTIVE', tag: 'TOUCHDESIGNER', type: 'INDEPENDENT', imgUrl: 'Td_code/BASICK_LOGOREACTIVE.gif' }
+                ],
+                personal: [
+                    { title: 'FEAST - MEMBANGUN DAN MENGHANCURKAN', tag: 'TOUCHDESIGNER', type: 'INDEPENDENT', imgUrl: 'Td_code/FEAST_MEMBANGUN.gif' },
+                    { title: 'Boris Acket Lights Simulation', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Td_code/FRED_LIGHTS.gif' },
+                    { title: 'WHITECHORUS', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Td_code/WHITECHORUS_RESPON TO SONG.gif' },
+                    { title: 'MELANKOLIA IN RETRO', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Td_code/MELANKOLIAINRETRO.gif' },
+                    { title: 'FEAST CHRONOGRAPHITE', tag: 'HTML', type: 'INDEPENDENT', imgUrl: 'Td_code/FEAST_Chronographite.gif' }
+                ]
+            },
+            VIDEO: {
+                client: [
+                    { title: 'CRUISING LIVE SESSION', tag: 'VIDEO PRODUCTION', type: 'INDEPENDENT', imgUrl: 'Video/Cruising Live Session.gif' },
+                    { title: 'LILOLILO LIVE SESSION', tag: 'VIDEO PRODUCTION', type: 'INDEPENDENT', imgUrl: 'Video/LILOLILO Live Session.gif' },
+                    { title: 'BERNIE SINGLE PROMO', tag: 'VIDEO PRODUCTION', type: 'INDEPENDENT', imgUrl: 'Video/BERNIE Single Promo.gif' },
+                    { title: 'MOVEJUICE Vapefest 2025', tag: 'VIDEO PRODUCTION', type: 'INDEPENDENT', imgUrl: 'Video/MOVEJUICE Vapefest 2025.gif' },
+                    { title: 'SENANDUNG DI BATAS MIMPI', tag: 'COLOR GRADING', type: 'INDEPENDENT', imgUrl: 'Video/Senandung di Batas Mimpi.gif' },
+                    { title: 'DWAY X SN RECORDS', tag: 'VIDEO PRODUCTION', type: 'INDEPENDENT', imgUrl: 'Video/DWAY X SN RECORDS.gif' },
+                    { title: 'PENDARRA LIVE SESSION', tag: 'COLOR GRADING', type: 'INDEPENDENT', imgUrl: 'Video/PENDARRA_LIVE SESSION.gif' }
+                ],
+                personal: []
+            },
+            PHOTO: {
+                client: [
+                    { title: 'BERNIE TSHIRT', tag: 'ADS', type: 'INDEPENDENT', imgUrl: 'Photo/BERNIE_TSHIRT.jpg' },
+                    { title: 'HONEY STEPPIN ROLLIN', tag: 'RELEASE ANC', type: 'INDEPENDENT', imgUrl: 'Photo/HONEY_RELEASE.jpg' },
+                    { title: 'CASECADE', tag: 'PICTURE PROFILE', type: 'INDEPENDENT', imgUrl: 'Photo/CASECADE_PictureProfile.jpg' },
+                    { title: 'BERNIE', tag: 'PICTURE PROFILE', type: 'INDEPENDENT', imgUrl: 'Photo/BERNIE_PictureProfile.jpg' },
+                    { title: 'RIMA INI MEKAR DI BANDUNG', tag: 'SHOWCASE', type: 'STUDIO', imgUrl: 'Photo/CRUISING_Rima ini Mekar di Bandung.jpg' },
+                    { title: 'SHREYA - CHERIOS', tag: 'ADS', type: 'INDEPENDENT', imgUrl: 'Photo/SHREYA_Cherios.jpg' }
+                ],
+                personal: []
+            }
+        };
+
+        // Aggregator untuk Slideshow Random
+        function getAllProjectsFlat() {
+            let all = [];
+            Object.keys(projectsData).forEach(cat => {
+                all = all.concat(projectsData[cat].client);
+                all = all.concat(projectsData[cat].personal);
+            });
+            return all;
+        }
+
+        // Setup Random Slideshow
+        let currentSlide = 0;
+        let randomSlides = [];
+
+        function initRandomSlideshow() {
+            const allProjects = getAllProjectsFlat();
+            randomSlides = [...allProjects].sort(() => 0.5 - Math.random()).slice(0, 8);
+
+            const wrapper = document.getElementById('slides-wrapper');
+            wrapper.innerHTML = randomSlides.map((item, idx) => `
+                <div class="slide-item ${idx === 0 ? 'active-slide' : ''} absolute inset-0">
+                    <img src="${item.imgUrl}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-6 sm:p-10 flex flex-col justify-end space-y-3">
+                        <div class="flex items-center gap-2">
+                            <span class="${item.type === 'STUDIO' ? 'bg-white text-black font-bold' : 'bg-zinc-800 text-zinc-200 border border-zinc-600'} font-mono text-[10px] sm:text-xs px-2.5 py-1 rounded tracking-wider uppercase">${item.type}</span>
+                            <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/20 font-mono text-[10px] sm:text-xs px-2.5 py-1 rounded uppercase">${item.tag}</span>
+                        </div>
+                        <h2 class="font-mono text-xl sm:text-3xl md:text-4xl font-extrabold text-white uppercase text-overlay-shadow">${item.title}</h2>
+                    </div>
+                </div>
+            `).join('');
+
+            initDots(randomSlides.length);
+        }
+
+        function initDots(count) {
+            const dotsContainer = document.getElementById('dots-container');
+            dotsContainer.innerHTML = '';
+            for (let idx = 0; idx < count; idx++) {
+                const dot = document.createElement('span');
+                dot.className = `slide-dot w-2 h-2 rounded-full transition-all cursor-pointer ${idx === 0 ? 'bg-white' : 'bg-white/40'}`;
+                dot.onclick = () => goToSlide(idx);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateSlides() {
+            const slides = document.querySelectorAll('.slide-item');
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active-slide', index === currentSlide);
+            });
+
+            const dots = document.querySelectorAll('.slide-dot');
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('bg-white');
+                    dot.classList.remove('bg-white/40');
+                } else {
+                    dot.classList.remove('bg-white');
+                    dot.classList.add('bg-white/40');
+                }
+            });
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide-item');
+            if(slides.length === 0) return;
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides();
+        }
+
+        function prevSlide() {
+            const slides = document.querySelectorAll('.slide-item');
+            if(slides.length === 0) return;
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlides();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlides();
+        }
+
+        setInterval(nextSlide, 5000);
+
+        // Intro Sequence (HELLO TAMPIL LEBIH LAMA)
+        window.addEventListener('DOMContentLoaded', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const introText = document.getElementById('intro-text');
+            const words = ["HELLO"];
+            let index = 0;
+
+            function showNextWord() {
+                if (index < words.length) {
+                    introText.innerText = words[index];
+                    introText.classList.remove('opacity-0', 'translate-y-2');
+                    introText.classList.add('opacity-100', 'translate-y-0');
+
+                    // Diperlama durasi tampilnya (2000ms / 2 detik)
+                    setTimeout(() => {
+                        introText.classList.remove('opacity-100', 'translate-y-0');
+                        introText.classList.add('opacity-0', '-translate-y-2');
+                        index++;
+                        setTimeout(showNextWord, 600);
+                    }, 2000);
+                } else {
+                    introScreen.style.opacity = '0';
+                    introScreen.style.pointerEvents = 'none';
+                    setTimeout(() => { introScreen.style.display = 'none'; }, 800);
+                }
+            }
+
+            setTimeout(showNextWord, 500);
+            initRandomSlideshow();
+        });
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('active-tab');
+            });
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+                requestAnimationFrame(() => { targetTab.classList.add('active-tab'); });
+            }
+
+            const navLinks = document.querySelectorAll('header nav a');
+            navLinks.forEach(link => {
+                link.classList.remove('text-white', 'border-b', 'border-white');
+                link.classList.add('text-zinc-500');
+            });
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-zinc-500');
+                activeNav.classList.add('text-white', 'border-b', 'border-white');
+            }
+        }
+
+        // Category Filter Function
+        function filterProjects(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            const slideshowView = document.getElementById('slideshow-view');
+            const categoryView = document.getElementById('category-view');
+
+            buttons.forEach(btn => {
+                const btnCategory = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (btnCategory === category) {
+                    btn.classList.add('bg-zinc-200', 'text-black', 'font-bold');
+                    btn.classList.remove('text-zinc-400', 'hover:bg-brandCard');
+                } else {
+                    btn.classList.remove('bg-zinc-200', 'text-black', 'font-bold');
+                    btn.classList.add('text-zinc-400', 'hover:bg-brandCard');
+                }
+            });
+
+            if (category === 'ALL') {
+                categoryView.classList.add('hidden');
+                slideshowView.classList.remove('hidden');
+                slideshowView.classList.remove('view-section');
+                void slideshowView.offsetWidth;
+                slideshowView.classList.add('view-section');
+            } else {
+                slideshowView.classList.add('hidden');
+                categoryView.classList.remove('hidden');
+                categoryView.classList.remove('view-section');
+                void categoryView.offsetWidth;
+                categoryView.classList.add('view-section');
+
+                const data = projectsData[category];
+
+                // Render Client Grid (Tanpa aspect ratio fixed & tanpa object-cover agar menyesuaikan tinggi media)
+                const clientBlock = document.getElementById('client-section-block');
+                const clientGrid = document.getElementById('client-grid');
+                document.getElementById('client-count-badge').innerText = `${data.client.length} PROJECTS`;
+
+                if (data.client.length > 0) {
+                    clientBlock.classList.remove('hidden');
+                    clientGrid.innerHTML = data.client.map(item => `
+                        <div class="project-card relative rounded-lg overflow-hidden border border-brandBorder hover:border-zinc-500 transition-all duration-300 group cursor-pointer break-inside-avoid bg-brandCard">
+                            <img src="${item.imgUrl}" class="w-full h-auto block group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 z-10"><span class="bg-white/90 text-black font-mono font-bold text-[9px] px-2 py-0.5 rounded tracking-wider uppercase shadow">${item.type}</span></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 flex flex-col justify-end space-y-1">
+                                <h3 class="font-mono text-sm font-semibold text-white uppercase text-overlay-shadow">${item.title}</h3>
+                                <div class="font-mono text-[10px]"><span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded uppercase">${item.tag}</span></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    clientBlock.classList.add('hidden');
+                }
+
+                // Render Personal Grid (Tanpa aspect ratio fixed & tanpa object-cover agar menyesuaikan tinggi media)
+                const personalBlock = document.getElementById('personal-section-block');
+                const personalGrid = document.getElementById('personal-grid');
+                document.getElementById('personal-count-badge').innerText = `${data.personal.length} PROJECTS`;
+
+                if (data.personal.length > 0) {
+                    personalBlock.classList.remove('hidden');
+                    personalGrid.innerHTML = data.personal.map(item => `
+                        <div class="project-card relative rounded-lg overflow-hidden border border-brandBorder hover:border-zinc-500 transition-all duration-300 group cursor-pointer break-inside-avoid bg-brandCard">
+                            <img src="${item.imgUrl}" class="w-full h-auto block group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 z-10"><span class="bg-black/80 text-zinc-300 border border-zinc-600 font-mono font-bold text-[9px] px-2 py-0.5 rounded tracking-wider uppercase">${item.type}</span></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 flex flex-col justify-end space-y-1">
+                                <h3 class="font-mono text-sm font-semibold text-white uppercase text-overlay-shadow">${item.title}</h3>
+                                <div class="font-mono text-[10px]"><span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded uppercase">${item.tag}</span></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    personalBlock.classList.add('hidden');
+                }
+            }
+        }
+
+        // Client Hover Listener
+        const clientItems = document.querySelectorAll('.client-item');
+        const clientBg = document.getElementById('client-bg-container');
+
+        clientItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const bgUrl = item.getAttribute('data-bg');
+                clientBg.style.backgroundImage = `url('${bgUrl}')`;
+                clientBg.classList.remove('opacity-0');
+                clientBg.classList.add('opacity-100');
+            });
+
+            item.addEventListener('mouseleave', () => {
+                clientBg.classList.remove('opacity-100');
+                clientBg.classList.add('opacity-0');
+            });
+        });
+
+        // Copy Email Helper
+        function copyToClipboard(text) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const copyBtnText = document.getElementById('copy-text');
+            const originalText = copyBtnText.innerText;
+            copyBtnText.innerText = 'COPIED TO CLIPBOARD!';
+            copyBtnText.classList.add('text-white');
+
+            setTimeout(() => {
+                copyBtnText.innerText = originalText;
+                copyBtnText.classList.remove('text-white');
+            }, 2000);
+        }
+
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
+</html>
